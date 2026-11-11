@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tabla de puntuación de herramientas de Vibe Coding</title>
+<style>
+  :root {
+    --fondo: #f6f7f9;
+    --tinta: #1b2430;
+    --suave: #5b6675;
+    --borde: #d9dee5;
+    --superficie: #ffffff;
+    --acento: #0f766e;
+    --s1: #f4c7c3; --s2: #f8e0b8; --s3: #f3efb4; --s4: #cfe8c4; --s5: #9fd5b5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fondo: #12161c; --tinta: #e8ecf1; --suave: #98a3b3;
+      --borde: #2b3441; --superficie: #1a2029; --acento: #5eead4;
+      --s1: #6b2f2b; --s2: #6b4f22; --s3: #5e5a24; --s4: #335a2c; --s5: #1f5c3d;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2rem 1rem 3rem;
+    background: var(--fondo); color: var(--tinta);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    line-height: 1.5;
+  }
+  main { max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 1.6rem; margin: 0 0 .25rem; }
+  p.sub { margin: 0 0 1.5rem; color: var(--suave); max-width: 70ch; }
+  .tabla-wrap { overflow-x: auto; border: 1px solid var(--borde); border-radius: 8px; background: var(--superficie); }
+  table { border-collapse: collapse; width: 100%; min-width: 980px; font-size: .9rem; }
+  th, td { padding: .6rem .7rem; border-bottom: 1px solid var(--borde); text-align: center; }
+  th { font-weight: 600; background: var(--fondo); position: sticky; top: 0; }
+  th:first-child, td:first-child, td.notas { text-align: left; }
+  td:first-child { font-weight: 600; white-space: nowrap; }
+  td.notas { min-width: 280px; color: var(--suave); font-size: .85rem; }
+  tr:last-child td { border-bottom: 0; }
+  td.n1 { background: var(--s1); } td.n2 { background: var(--s2); } td.n3 { background: var(--s3); }
+  td.n4 { background: var(--s4); } td.n5 { background: var(--s5); }
+  td.final { font-weight: 700; font-size: 1.05rem; }
+  tr.mejor td:first-child { box-shadow: inset 4px 0 0 var(--acento); }
+  .leyenda { margin-top: 1rem; font-size: .85rem; color: var(--suave); }
+  .conclusion { margin-top: 1.5rem; padding: 1rem 1.25rem; border-left: 4px solid var(--acento); background: var(--superficie); border-radius: 0 8px 8px 0; }
+  .conclusion h2 { font-size: 1.05rem; margin: 0 0 .4rem; }
+  .conclusion p { margin: 0; max-width: 80ch; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Tabla de puntuación de herramientas de Vibe Coding</h1>
+  <p class="sub">Cada criterio va de 1 a 5, donde 5 es la mejor alineación con mis necesidades: proyectos full stack que empiezan rápido pero tienen que poder mantenerse.</p>
+ 
+  <div class="tabla-wrap">
+    <table id="tabla">
+      <thead>
+        <tr>
+          <th>Herramienta</th><th>UI/UX</th><th>Costo</th><th>Velocidad</th>
+          <th>Dependencia de plataforma</th><th>Control</th><th>Mantenibilidad</th>
+          <th>Calidad del código</th><th>Reutilización</th>
+          <th>Mi calificación (1-5)</th><th>Notas / justificación</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+ 
+  <p class="leyenda">El borde verde marca la herramienta con la calificación más alta. Los colores van de rojo (1) a verde (5).</p>
+ 
+  <section class="conclusion">
+    <h2>Mi decisión</h2>
+    <p id="conclusion"></p>
+  </section>
+</main>
+ 
+<script>
+  // Cada herramienta es un objeto. Los 8 primeros valores son criterios (1-5).
+  // "mia" es mi calificación según mis necesidades y "notas" la justificación.
+  const herramientas = [
+    { nombre: "Vercel v0",      ui: 5, costo: 3, velocidad: 5, dependencia: 2, control: 2, mantenibilidad: 1, calidad: 5, reutilizacion: 1,
+      mia: 3, notas: "Genera interfaces muy bonitas en segundos, pero el código es difícil de mantener y me ata a Vercel. Lo uso para prototipar pantallas." },
+    { nombre: "Replit",         ui: 4, costo: 1, velocidad: 4, dependencia: 1, control: 1, mantenibilidad: 3, calidad: 5, reutilizacion: 1,
+      mia: 2, notas: "Entorno completo en el navegador y buena calidad, pero es caro y quedo muy atado a su plataforma." },
+    { nombre: "Lovable",        ui: 5, costo: 3, velocidad: 4, dependencia: 2, control: 3, mantenibilidad: 3, calidad: 4, reutilizacion: 1,
+      mia: 3, notas: "Muy bueno para un MVP con backend incluido. La dependencia estaba como '?', la estimo en 2 porque se puede exportar a GitHub." },
+    { nombre: "Windsurf",       ui: 3, costo: 5, velocidad: 3, dependencia: 5, control: 5, mantenibilidad: 5, calidad: 5, reutilizacion: 5,
+      mia: 4, notas: "Editor con IA, barato y con control total del código. Un poco más lento al empezar de cero." },
+    { nombre: "Cursor",         ui: 2, costo: 4, velocidad: 3, dependencia: 5, control: 4, mantenibilidad: 5, calidad: 4, reutilizacion: 5,
+      mia: 5, notas: "Trabajo sobre mi propio repositorio, con contexto de todo el proyecto. Ideal para mantener y crecer una app." },
+    { nombre: "Bolt.new",       ui: 4, costo: 3, velocidad: 5, dependencia: 2, control: 3, mantenibilidad: 3, calidad: 4, reutilizacion: 3,
+      mia: 3, notas: "Muy rápido para levantar una app full stack en el navegador. Para algo serio hay que sacar el código y refactorizar." },
+    { nombre: "GitHub Copilot", ui: 2, costo: 4, velocidad: 3, dependencia: 5, control: 4, mantenibilidad: 5, calidad: 4, reutilizacion: 5,
+      mia: 4, notas: "Se integra en VS Code sin cambiar mi flujo. Muy útil para autocompletar y aprender, menos potente creando proyectos enteros." },
+    { nombre: "Claude Code",    ui: 2, costo: 3, velocidad: 4, dependencia: 5, control: 5, mantenibilidad: 5, calidad: 5, reutilizacion: 5,
+      mia: 5, notas: "Agente en la terminal que edita mi repo, ejecuta tests y explica los cambios. Lo combino con Cursor para revisar." }
+  ];
+ 
+  const criterios = ["ui", "costo", "velocidad", "dependencia", "control", "mantenibilidad", "calidad", "reutilizacion"];
+ 
+  // Devuelve una celda <td> con la clase de color según la nota
+  function celda(valor, extra = "") {
+    const td = document.createElement("td");
+    td.textContent = valor;
+    td.className = ("n" + valor + " " + extra).trim();
+    return td;
+  }
+ 
+  function rellenarTabla() {
+    const tbody = document.querySelector("#tabla tbody");
+    const mejorNota = Math.max(...herramientas.map(h => h.mia));
+ 
+    herramientas.forEach(h => {
+      const fila = document.createElement("tr");
+      if (h.mia === mejorNota) fila.classList.add("mejor");
+ 
+      const nombre = document.createElement("td");
+      nombre.textContent = h.nombre;
+      fila.appendChild(nombre);
+ 
+      criterios.forEach(c => fila.appendChild(celda(h[c])));
+      fila.appendChild(celda(h.mia, "final"));
+ 
+      const notas = document.createElement("td");
+      notas.className = "notas";
+      notas.textContent = h.notas;
+      fila.appendChild(notas);
+ 
+      tbody.appendChild(fila);
+    });
+ 
+    const ganadoras = herramientas.filter(h => h.mia === mejorNota).map(h => h.nombre);
+    document.getElementById("conclusion").textContent =
+      "Me quedo con " + ganadoras.join(" y ") + " como herramientas principales: dan control del código, " +
+      "son fáciles de mantener y no me atan a una plataforma. Uso v0 o Lovable solo para prototipar la interfaz " +
+      "y luego paso el código a mi repositorio. Siempre pruebo y reviso a mano lo que genera la IA.";
+  }
+ 
+  rellenarTabla();
+</script>
+</body>
+</html>
